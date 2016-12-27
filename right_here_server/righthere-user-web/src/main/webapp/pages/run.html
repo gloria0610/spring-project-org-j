@@ -1,0 +1,72 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        任务执行
+        <small>任务执行</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-tasks"></i> 首页</a></li>
+        <li><a href="/#/job"><i class="fa fa-tasks"></i> 任务管理</a></li>
+        <li class="active">任务执行</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">模型列表</h3>
+
+                    <div class="box-tools">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li ng-repeat="v in global.dataModels" ng-class="selectClass(v.id)">
+                            <a href="javascript:void(0);" ng-click="getModelById(v.id)"><i
+                                    class="fa fa-circle-o text-light-blue"></i> {{ v.nameCn }}</a>
+                        </li>
+                    </ul>
+                </div><!-- /.box-body -->
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-6 col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">参数设置</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group" ng-class="formClass(jobRunParams.project)">
+                                <label>odps project: </label>
+                                <input ng-model="jobRunParams.project" type="text" class="form-control"
+                                       placeholder="必填, ODPS Project">
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <!--aa:{{ jobRunParams.userParams }}-->
+                            <label>模型参数:</label>
+                            <div class="form-group" ng-repeat="p in selectModel.userParams track by $index" ng-class="formClass(jobRunParams.userParams[p])">
+                                <small class="label label-default"><label>{{ $index+1 }}. {{ p }}</label></small>
+                                <textarea ng-model="jobRunParams.userParams[p]" class="form-control" placeholder="必填, {{ p }}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <button ng-show="global.auth('xiaobailong-crm_job_run')" class="btn btn-primary" ng-disabled="hasRan == 1" ng-click="run()">执行</button>
+                </div>
+                <div class="overlay" ng-show="loading">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
+            </div><!-- /.box -->
+        </div>
+
+    </div><!-- /.row -->
+
+</section><!-- /.content -->

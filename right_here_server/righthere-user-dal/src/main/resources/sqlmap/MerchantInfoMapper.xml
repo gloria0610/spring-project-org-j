@@ -1,0 +1,64 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.righthere.user.server.dal.mapper.MerchantInfoMapper">
+    <resultMap id="BaseResultMap" type="com.righthere.user.server.dal.dataobject.MerchantInfoDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="merchant_code" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="merchant_name" property="merchantName" jdbcType="VARCHAR"/>
+        <result column="account_id" property="accountId" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_time" property="creatTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="sign_key" property="signKey" jdbcType="TIMESTAMP"/>
+        <result column="licence_no" property="licenceNo" jdbcType="VARCHAR"/>
+        <result column="contract_no" property="contractNo" jdbcType="VARCHAR"/>
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR"/>
+        <result column="bank_code" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="bank_card_no" property="bankCodeNo" jdbcType="VARCHAR"/>
+        <result column="check_file_email" property="checkFileEmail" jdbcType="VARCHAR"/>
+        <result column="rate" property="rate" jdbcType="VARCHAR"/>
+        <result column="buy_fee" property="buyFee" jdbcType="TIMESTAMP"/>
+        <result column="sale_fee" property="saleFee" jdbcType="VARCHAR"/>
+        <result column="tax_fee_rate" property="taxFeeRate" jdbcType="VARCHAR"/>
+        <result column="process_fee_rate" property="processFeeRate" jdbcType="VARCHAR"/>
+        <result column="insurance_fee_rate" property="insuranceFeeRate" jdbcType="VARCHAR"/>
+        <result column="express_fee_rate" property="expressFeeRate" jdbcType="VARCHAR"/>
+        <result column="insurance_fee_wave" property="insuranceFeeWave" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,merchant_code,merchant_name,account_id,description,status,create_time,update_time,sign_key,licence_no,contract_no,legal_person,bank_code,bank_card_no,check_file_email,rate,buy_fee,sale_fee,tax_fee_rate,process_fee_rate,insurance_fee_rate,express_fee_rate,insurance_fee_wave
+    </sql>
+    <!--根据入参，建立商户信息-->
+    <insert id="setMerchant" parameterType="string">
+        insert into gbanker_merchant_trade.merchant(merchant_code,merchant_name,account_id,status,create_time,update_time,sign_key)
+        values(#{merchantCode,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR},#{accountId,jdbcType=VARCHAR},1,now(),now(),'yangyang');
+    </insert>
+    <!--根据入参，建立商户信息-->
+    <insert id="setMerchantSettle" parameterType="string">
+        <!--&lt;!&ndash;插入settle表&ndash;&gt;-->
+        INSERT into gbanker_merchant_trade.settle_summary(merchant_code,total_money,update_time)
+        values(#{merchantCode,jdbcType=VARCHAR},0,now());
+    </insert>
+    <!--根据入参，建立商户信息-->
+    <insert id="setMerchantAccount" parameterType="string">
+        <!--&lt;!&ndash;创建账户数据&ndash;&gt;-->
+        INSERT into gbanker_account.account_basic(id,user_id,regist_time,total_money,total_gold_weight,status,total_finance_money)
+        values(#{accountId,jdbcType=VARCHAR},#{merchantCode,jdbcType=VARCHAR},now(),'0','0',1,'0');
+    </insert>
+    <!--&lt;!&ndash;根据accountId查询商户的账户信息&ndash;&gt;-->
+    <select id="getMerchantBasicByAccountId" resultMap="BaseResultMap"
+            parameterType="Long">
+        select
+        <include refid="Base_Column_List" />
+        from gbanker_merchant_trade.merchant
+        where account_id=#{accountId,jdbcType=VARCHAR};
+    </select>
+    <!--根据账户查看商户信息是否存在-->
+    <select id="getMerchantNameByAccountId" resultMap="BaseResultMap"
+            parameterType="Long">
+        select
+        merchant_name
+        from gbanker_merchant_trade.merchant
+        where account_id=#{accountId,jdbcType=VARCHAR};
+    </select>
+</mapper>

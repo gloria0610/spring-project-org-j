@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <context:property-placeholder location="classpath:hessian.properties" ignore-unresolvable="true"
+                                  local-override="true" file-encoding="utf-8" ignore-resource-not-found="false"/>
+
+
+    <!-- account 接口 -->
+    <bean id="accountServiceFacade" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+        <property name="overloadEnabled" value="true"/>
+        <property name="readTimeout" value="3000" />
+        <property name="serviceUrl" value="${account.hessian.url}" />
+        <property name="serviceInterface" value="com.gbanker.account.server.service.batch.IAccountBatchTradeService" />
+    </bean>
+
+
+
+
+
+
+</beans>

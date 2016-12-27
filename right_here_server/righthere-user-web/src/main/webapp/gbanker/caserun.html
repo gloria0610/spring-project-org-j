@@ -1,0 +1,79 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        用例管理
+        <small>用例执行</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">用例执行</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content" >
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">用例选择</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>模块:</label>
+                                <select multiple ng-model="global.modulename" class="form-control" style="width: 100%;height:200px">
+                                    <option ng-repeat="v in global.moduleoptions" value="{{ v }}">{{ v }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>用例:</label>
+                                <select multiple ng-model="global.intefacename" class="form-control" style="width: 100%;height:200px">
+                                    <option ng-repeat="v in global.intefaceoptions" value="{{ v }}">{{ v }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>方法:</label>
+                                <select multiple ng-model="global.methodname" class="form-control" style="width: 100%;height:200px">
+                                    <option ng-repeat="v in global.methodoptions" value="{{ v }}">{{ v }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>选择当前用户:</label>
+                                <select ng-model="global.username" class="form-control" style="width: 100%;">
+                                    <option ng-repeat="v in global.users" value="{{ v }}">{{ v }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="overlay" ng-show="loading">-->
+                <!--<i class="fa fa-refresh fa-spin"></i>-->
+                <!--</div>-->
+                <div class="box-footer clearfix text-center">
+                    <button class="btn btn-default" ng-click="reset()">重置</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-primary" ng-click="execute()">执行</button>
+
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div>
+</section><!-- /.content -->
+
+<section class="content">
+    <div class="row" ng-show="runloading">
+        <div class="col-lg-12 col-xs-12">
+            <div class="overlay" ng-show="loading">
+                <i class="fa fa-refresh fa-spin"></i><label>loading...</label>
+            </div>
+            <pre class="hierarchy bring-up" style="font-size:18px;background:#333;color:#fff" ng-hide="loading"><code class="language-bash" data-lang="bash">{{global.output}}</code></pre>
+    </div>
+</section>

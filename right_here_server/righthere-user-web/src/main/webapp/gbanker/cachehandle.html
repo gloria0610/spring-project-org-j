@@ -1,0 +1,127 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        测试工具
+        <small>缓存操作</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 测试工具</a></li>
+        <li class="active">缓存操作</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Memcache缓存操作</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>cache key: </label>
+                                <input ng-model="global.key" type="text" class="form-control" placeholder="order_cancel_times_limit">
+                            </div>
+                        </div>
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-1">
+                            <br>
+                            <button class="btn btn-success" ng-click="get()">GET</button>
+                        </div>
+
+                        <div class="col-xs-1">
+                            <br>
+                            <button class="btn btn-danger" ng-click="delete()">DELETE</button>
+                        </div>
+
+                        <div class="col-xs-3">
+                            <br>
+                            <button class="btn btn-info" ng-click="clearmemcache()">CLEAR</button>
+                        </div>
+
+                    </div>
+                    <div class="row" ng-show="show">
+                        <div class="col-xs-12">
+                            <pre class="hierarchy bring-up" style="font-size:14px;color:#ab21ed"><code class="language-bash" data-lang="bash" >{{global.value}}</code></pre>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <table class="table">
+                                <tbody>
+                                <tr ng-repeat = "m in memcache.latestkey">
+                                    <td>{{m.cacheKey}}</td>
+                                    <td>查询了{{m.useTimes}}次</td>
+                                    <td><a style="cursor: pointer" ng-click="searchmemcache(m.cacheKey)"><u>search</u></a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+
+</section><!-- /.content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Redis缓存操作</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>redis key: </label>
+                                <input ng-model="global.rediskey" type="text" class="form-control" placeholder="order_cancel_times_limit">
+                            </div>
+                        </div>
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-1">
+                            <br>
+                            <button class="btn btn-success" ng-click="getredis()">GET</button>
+                        </div>
+
+                        <div class="col-xs-1">
+                            <br>
+                            <button class="btn btn-danger" ng-click="deleteredis()">DELETE</button>
+                        </div>
+
+                        <div class="col-xs-3">
+                            <br>
+                            <button class="btn btn-info" ng-click="clearredis()">CLEAR</button>
+                        </div>
+
+                    </div>
+                    <div class="row" ng-show="redisshow">
+                        <div class="col-xs-12">
+                            <pre class="hierarchy bring-up" style="font-size:14px;color:#ab21ed"><code class="language-bash" data-lang="bash" >{{global.redisvalue}}</code></pre>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <table class="table">
+                                <tbody>
+                                <tr ng-repeat="m in redis.latestkey">
+                                    <td>{{m.cacheKey}}</td>
+                                    <td>查询了{{m.useTimes}}次</td>
+                                    <td><a style="cursor: pointer" ng-click="searchredis(m.cacheKey)"><u>search</u></a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+
+</section><!-- /.content -->

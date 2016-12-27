@@ -1,0 +1,154 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+         账户操作
+        <small>加钱加金</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 测试工具</a></li>
+        <li class="active">账户操作</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+
+        <div class="col-lg-12 col-xs-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">一键加钱(telephone)</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>手机号</label>
+                                <input ng-model="cashaddtel.telephone" type="text" class="form-control" placeholder="telephone">
+                                <!--<label>{{regInfo.merchant_name}}</label>-->
+                            </div>
+                        </div>
+
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>加钱金额(分) </label>
+                                <input ng-model="cashaddtel.money" type="text" class="form-control" placeholder="money">
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="overlay" ng-show="loading">-->
+                    <!--<i class="fa fa-refresh fa-spin"></i>-->
+                    <!--</div>-->
+                    <div class="box-footer clearfix text-center">
+                        <button class="btn btn-default" ng-click="resetm()">重置</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-primary" ng-click="addCashTel()">提交</button>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+
+            <div class="col-lg-12 col-xs-12">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">一键加钱(账户Id)</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label>账户ID（account_id）:</label>
+                                    <input ng-model="cashaddacc.accountId" type="text" class="form-control" placeholder="accountId">
+                                </div>
+                            </div>
+
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label>加钱金额(分) </label>
+                                    <input ng-model="cashaddacc.money" type="text" class="form-control" placeholder="money">
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="overlay" ng-show="loading">-->
+                        <!--<i class="fa fa-refresh fa-spin"></i>-->
+                        <!--</div>-->
+                        <div class="box-footer clearfix text-center">
+                            <button class="btn btn-default" ng-click="resetm()">重置</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-primary" ng-click="addCashAccount()">提交</button>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div>
+
+        <!-- Small boxes (Stat box) -->
+
+            <div class="col-lg-12 col-xs-12">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">一键加金(telephone)</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label>手机号</label>
+                                        <input ng-model="goldaddtel.telephone" type="text" class="form-control" placeholder="telephone">
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label>加金金重(毫克) </label>
+                                        <input ng-model="goldaddtel.goldWeight" type="text" class="form-control" placeholder="goldWeight">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box-footer clearfix text-center">
+                                <button class="btn btn-default" ng-click="resetm()">重置</button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-primary" ng-click="addGoldTel()">提交</button>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div>
+
+            <!-- Small boxes (Stat box) -->
+                <div class="col-lg-12 col-xs-12">
+                        <div class="box box-default">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">一键加金(账户Id)</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="form-group">
+                                            <label>账户ID（account_id）:</label>
+                                            <input ng-model="goldaddacc.accountId" type="text" class="form-control" placeholder="accountId">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-3">
+                                        <div class="form-group">
+                                            <label>加金金重(毫克) </label>
+                                            <input ng-model="goldaddacc.goldWeight" type="text" class="form-control" placeholder="goldWeight">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="overlay" ng-show="loading">-->
+                                <!--<i class="fa fa-refresh fa-spin"></i>-->
+                                <!--</div>-->
+                                <div class="box-footer clearfix text-center">
+                                    <button class="btn btn-default" ng-click="resetm()">重置</button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button class="btn btn-primary" ng-click="addGoldAccount()">提交</button>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </div>
+            </div>
+
+
+    </section><!-- /.content -->

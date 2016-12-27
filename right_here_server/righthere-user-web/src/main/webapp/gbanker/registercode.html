@@ -1,0 +1,255 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        验证码
+        <small>最新验证码</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">验证码</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">验证码</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" ng-click="refreshcodes()"><i class="fa fa-refresh"></i>刷新
+                        </button>
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-hover" style="table-layout: fixed; WORD-WRAP: break-word;">
+                        <tr>
+                            <th>手机号</th>
+                            <th>发送时间</th>
+                            <th style="width: 250px;">验证码</th>
+                            <th>状态</th>
+                            <th style="">用途</th>
+                        </tr>
+                        <tr>
+
+                            <td class="lead text-red">
+                                {{ global.newregistercodes_firstline.mobile }}
+                            </td>
+                            <td>
+                                {{ global.newregistercodes_firstline.sendTime | date:'yyyy-MM-dd HH:mm:ss'}}
+                            </td>
+                            <td class="lead text-red">
+                                {{ global.newregistercodes_firstline.authCode }}
+                            </td>
+                            <td>
+                                {{ global.newregistercodes_firstline.status | registercodestatus}}
+                            </td>
+                            <td>
+                                {{ global.newregistercodes_firstline.sendTypeCode }}
+                            </td>
+                        </tr>
+                        <tr ng-repeat="m in global.newregistercodes_others" ng-class="selectClass(m.id)">
+
+                            <td>
+                                {{ m.mobile }}
+                            </td>
+                            <td>
+                                {{ m.sendTime | date:'yyyy-MM-dd HH:mm:ss'}}
+                            </td>
+                            <td>
+                                {{ m.authCode }}
+                            </td>
+                            <td>
+                                {{ m.status | registercodestatus}}
+                            </td>
+                            <td>
+                                {{ m.sendTypeCode }}
+                            </td>
+                        </tr>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix">
+                </div>
+            </div><!-- /.box -->
+        </div><!-- ./col -->
+    </div><!-- /.row -->
+
+    <div class="modal" id="modelDetailDialog">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">{{ selectModel.nameCn }} 详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box">
+                                <div class="box-header">
+                                </div><!-- /.box-header -->
+                                <div class="box-body">
+                                    <dl class="dl-horizontal">
+                                        <dt>模型ID</dt>
+                                        <dd ng-bind="selectedModel.id">加载中...</dd>
+                                        <dt>模型名称</dt>
+                                        <dd>{{ selectedModel.nameCn }}
+                                            <small>({{ selectedModel.nameEn }})</small>
+                                        </dd>
+                                        <dt>提交时间</dt>
+                                        <dd ng-bind="selectedModel.createTime | date : 'yyyy-MM-dd hh:mm:ss' ">
+                                            加载中...
+                                        </dd>
+                                        <dt>开发者</dt>
+                                        <dd>{{ selectedModel.author }}
+                                            <small>({{ selectedModel.email }})</small>
+                                        </dd>
+                                        <dt>模型输出</dt>
+                                        <dd>
+                                            {{ selectedModel.outputTableInfo }}
+                                        </dd>
+                                        <dt>用户参数</dt>
+                                        <dd>
+                                            <table class="table table-bordered table-striped table-condensed"
+                                                   style=" width: 90%;">
+                                                <tr ng-repeat="k in selectedModel.userParams track by $index">
+                                                    <th width="100px;">参数{{ $index+1 }}</th>
+                                                    <td ng-bind="k"></td>
+                                                </tr>
+                                            </table>
+                                        </dd>
+                                    </dl>
+                                    <hr>
+                                    <dl>
+                                        <dt>节点列表</dt>
+                                        <dd>
+                                            <table class="table table-bordered table-striped table-condensed"
+                                                   style="table-layout: fixed; WORD-WRAP: break-word;">
+                                                <thead>
+                                                <tr>
+                                                    <th>id</th>
+                                                    <th>更新时间</th>
+                                                    <th style="width:200px;">英文名</th>
+                                                    <th style="width:150px;">节点名</th>
+                                                    <th>nodetype</th>
+                                                    <th>scriptType</th>
+                                                    <th>parents</th>
+                                                    <th ng-show="global.auth('xiaobailong-crm_admin')"
+                                                        style="width:150px;">操作
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="k in selectedModel.modelNodeList">
+                                                    <td>{{ k.id }}</td>
+                                                    <td>{{ k.updateTime | date : 'yyyy-MM-dd hh:mm:ss' }}</td>
+                                                    <td>
+                                                        <div ng-show="editingNode.id != k.id">
+                                                            {{ k.nameEn }}
+                                                        </div>
+                                                        <div class="input-group" ng-show="editingNode.id == k.id">
+                                                            <input type="text" class="form-control"
+                                                                   ng-model="editingNode.nameEn">
+                                                            <span class="input-group-btn"></span>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <div ng-show="editingNode.id != k.id">
+                                                            {{ k.nameCn }}
+                                                        </div>
+                                                        <div class="input-group" ng-show="editingNode.id == k.id">
+                                                            <input type="text" class="form-control"
+                                                                   ng-model="editingNode.nameCn">
+                                                            <span class="input-group-btn"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div ng-show="editingNode.id != k.id">
+                                                            {{ k.nodetype }}
+                                                        </div>
+                                                        <div class="input-group" ng-show="editingNode.id == k.id">
+                                                            <input type="text" class="form-control"
+                                                                   ng-model="editingNode.nodetype">
+                                                            <span class="input-group-btn"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div ng-show="editingNode.id != k.id">
+                                                            {{ k.scriptType }}
+                                                        </div>
+                                                        <div class="input-group" ng-show="editingNode.id == k.id">
+                                                            <input type="text" class="form-control"
+                                                                   ng-model="editingNode.scriptType">
+                                                            <span class="input-group-btn"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width:150px;">
+                                                        <div ng-show="editingNode.id != k.id">
+                                                            {{ k.parents | trim }}
+                                                        </div>
+                                                        <div class="input-group" ng-show="editingNode.id == k.id">
+                                                            <input type="text" class="form-control"
+                                                                   ng-model="editingNode.parents">
+                                                            <span class="input-group-btn"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td ng-show="global.auth('xiaobailong-crm_admin')">
+                                                        <div class="btn-group">
+                                                            <button ng-show="editingNode.id != k.id"
+                                                                    class="btn btn-default btn-flat btn-xs"
+                                                                    ng-click="editNode(k)">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                            <button ng-show="editingNode.id == k.id"
+                                                                    class="btn btn-default  btn-flat btn-xs"
+                                                                    ng-click="saveNode(k.id)">
+                                                                <i class="fa fa-save"></i>
+                                                            </button>
+                                                            <button ng-show="editingNode.id == k.id"
+                                                                    class="btn btn-default  btn-flat btn-xs"
+                                                                    ng-click="cancelEditNode()">
+                                                                <i class="fa fa-rotate-left"></i>
+                                                            </button>
+
+                                                            <button ng-show="editingNode.id == k.id"
+                                                                    class="btn btn-warning btn-flat btn-xs"
+                                                                    ng-click="deleteNode(k.id)">
+                                                                <i class="fa fa-remove"></i>
+                                                            </button>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+
+                                            </table>
+                                        </dd>
+
+                                    </dl>
+
+                                </div><!-- /.box-body -->
+                                <div class="overlay" ng-show="selectLoading">
+                                    <i class="fa fa-refresh fa-spin"></i>
+                                </div>
+                                <div class="box-footer clearfix text-center">
+                                    <div class="btn-group">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+</section><!-- /.content -->

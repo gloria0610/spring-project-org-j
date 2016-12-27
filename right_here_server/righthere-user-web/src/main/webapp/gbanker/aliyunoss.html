@@ -1,0 +1,86 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        第三方接入
+        <small>阿里云oss</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">阿里云oss</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">清结算文件列表</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default pull-right" ng-click="refreshcases()"><i class="fa fa-refresh"></i>刷新
+                        </button>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-hover" style="table-layout: fixed; WORD-WRAP: break-word;">
+                        <tr>
+                            <th >文件名</th>
+                            <th style="width: 200px;">操作</th>
+                        </tr>
+
+                        <tr ng-repeat="m in global.clearRecords" ng-class="selectClass(m.id)">
+                            <td>
+                                {{ m }}
+                            </td>
+                            <td>
+                                <button class="btn btn-warning"
+                                        ng-click="selectModel(m)">
+                                    删除文件
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix">
+                </div>
+            </div><!-- /.box -->
+        </div><!-- ./col -->
+    </div><!-- /.row -->
+
+    <div class="modal" id="modelPasswordDialog">
+        <div class="modal-dialog  modal-lg" style="width: 500px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">您的操作非常危险，请仔细核对后再输入密码！</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box">
+                                <div class="box-header">
+                                </div><!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label>即将删除文件：{{global.selectfilename}}</label>
+                                        <label>请输入确认密码：</label>
+                                        <input type="password" ng-model="global.password" class="form-control" style="display: inline-block;width: 50%" placeholder="" ng-model="data.requestUrl">
+                                        <p class="text-red" ng-show="showpasswordtip">wrong password！</p></div>
+                                </div><!-- /.box-body -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-danger pull-right"  ng-click="submitCase()">确认删除</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+</section><!-- /.content -->

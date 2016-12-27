@@ -1,0 +1,313 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        任务管理
+        <small>任务管理</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">任务管理</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">任务查询</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <label>JobId: </label>
+                                <input ng-model="jobQuery.id" type="text" class="form-control" placeholder="jobId">
+                            </div>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>算法模型:</label>
+                                <select ng-model="jobQuery.modelId" class="form-control select2" style="width: 100%;">
+                                    <option selected="selected" value="-1">不限</option>
+                                    <option ng-repeat="v in global.dataModels" value="{{ v.id }}">{{ v.nameCn }}
+                                    </option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>FlowName:</label>
+                                <!--<select class="form-control" id="flow_name_input"  ng-model="jobQuery.flowName"></select>-->
+                                <input ng-model="jobQuery.flowName" type="text" class="form-control" placeholder="模糊查询">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>提交时间: </label>
+                                <input type="text" id="job_create_time_query" class="form-control" value="请选择提交日期">
+                                <input id="job-query-startTime" ng-model="jobQuery.startTime" type="hidden">
+                                <input id="job-query-endTime" ng-model="jobQuery.endTime" type="hidden">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group">
+                                <label>系统类型:</label>
+                                <select ng-model="jobQuery.systemId" class="form-control select2">
+                                    <option selected="selected" value="-1">不限</option>
+                                    <option ng-repeat="v in global.systemInfo.systemTypes" value="{{ v.systemId }}">
+                                        {{ v.showName }}
+                                    </option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="overlay" ng-show="loading">-->
+                <!--<i class="fa fa-refresh fa-spin"></i>-->
+                <!--</div>-->
+                <div class="box-footer clearfix text-center">
+                    <button class="btn btn-default" ng-click="reset()">重置</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-primary" ng-click="query()">查询</button>
+
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div>
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-lg-12 col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">任务列表</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-hover" style="table-layout: fixed; WORD-WRAP: break-word;">
+                        <tr>
+                            <th style="width: 80px">jobId</th>
+                            <th style="width: 150px">提交时间</th>
+                            <th style="width: 250px;">flowName</th>
+                            <th>算法模型</th>
+                            <th>系统类型</th>
+                            <!--<th>JOB状态</th>-->
+                            <th>运行状态</th>
+                            <th style="">进度</th>
+                        </tr>
+                        <tr ng-repeat="job in jobList" ng-click="getJobById(job.id)" style="cursor: pointer"
+                            ng-class="selectClass(job.id)">
+
+                            <td>{{ job.id }}</td>
+                            <td>{{ job.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{ job.flowName }}</td>
+                            <td>{{ job.modelId | model_name: global.dataModels }}</td>
+                            <td>{{ job.systemId | system_type_name: global.systemInfo.systemTypes }}</td>
+                            <!--<td ng-bind-html="job.status | job_status"></td>-->
+                            <td ng-bind-html="job.instanceStatus | instance_status"></td>
+                            <td>
+                                <div class="progress-group">
+                                    <div class="clearfix">
+                                        <small class="pull-right">{{ job.successActivityCount }}/{{
+                                            job.totalActivityCount }}
+                                        </small>
+                                    </div>
+                                    <div class="progress progress-xs progress-striped active">
+                                        <div class="progress-bar progress-bar-success"
+                                             style="width:{{ job | process }}%"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="overlay" ng-show="loading">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a ng-click="query(1)">&laquo;</a></li>
+                        <li ng-class="pageClass(p)" ng-repeat="p in showPages">
+                            <a href="javascript:void(0);" ng-click="query(p)" ng-bind="p"></a>
+                        </li>
+                        <li><a ng-click="query(pager.pageTotal)">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div><!-- /.box -->
+        </div><!-- ./col -->
+    </div><!-- /.row -->
+
+    <div class="modal" id="jobInstanceDialog">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">任务{{ selectJob.id }} 详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="box">
+                        <div class="box-header">
+                        </div><!-- /.box-header -->
+                        <div class="box-body no-padding">
+                            <dl class="dl-horizontal">
+                                <dt>Flow Name</dt>
+                                <dd ng-bind="selectJob.flowName">加载中...</dd>
+                                <dt>提交时间</dt>
+                                <dd ng-bind="selectJob.createTime | date : 'yyyy-MM-dd hh:mm:ss' ">加载中...</dd>
+                                <!--<dt>任务状态</dt>-->
+                                <!--<dd ng-bind-html="selectJob.status | job_status"></dd>-->
+                                <dt>运行状态</dt>
+                                <dd>
+                                    <span ng-bind-html="selectJob.instanceStatus | instance_status"></span>
+                                    (<span class="progress-number"><b>{{ selectJob.successActivityCount }}</b>/<b>{{
+                                    selectJob.totalActivityCount }}</b></span>)
+                                </dd>
+                                <dt>算法模型</dt>
+                                <dd>
+                                    <span ng-bind="selectJob.modelId | model_name: global.dataModels"></span> (id: <span
+                                        ng-bind="selectJob.modelId">加载中...</span>)
+                                </dd>
+                                <dt>提交人</dt>
+                                <dd ng-bind="selectJob.oldTaskDTO.submitterId">加载中...</dd>
+                                <dt>系统类别</dt>
+                                <dd ng-bind="selectJob.systemId | system_type_name: global.systemInfo.systemTypes ">
+                                    加载中...
+                                </dd>
+                                <dt>用户参数</dt>
+                                <dd>
+                                    <table class="table table-bordered table-striped table-condensed"
+                                           style=" width: 90%;table-layout: fixed; WORD-WRAP: break-word;">
+                                        <tr ng-repeat="(k,v) in selectJob.oldTaskDTO.params">
+                                            <th ng-bind="k"></th>
+                                            <td ng-bind="v"></td>
+                                        </tr>
+                                    </table>
+
+                                </dd>
+                                <dt>系统参数</dt>
+                                <dd>
+                                    <table class="table table-bordered table-striped table-condensed"
+                                           style=" width: 90%;">
+                                        <tr ng-repeat="(k,v) in selectJob.oldTaskDTO.systemParams">
+                                            <th ng-bind="k"></th>
+                                            <td ng-bind="v"></td>
+                                        </tr>
+                                    </table>
+                                </dd>
+                                <dt>ODPS信息</dt>
+                                <dd>
+                                    <table class="table table-bordered table-striped table-condensed"
+                                           style=" width: 90%;">
+                                        <tr ng-repeat="o in selectJob.oldTaskDTO.odpsAccounts">
+                                            <th>AccessId</th>
+                                            <td ng-bind="o.odpsAccessId"></td>
+                                            <th>Project</th>
+                                            <td ng-bind="o.odpsProjectName"></td>
+                                        </tr>
+                                    </table>
+                                </dd>
+                                <hr>
+                                <dt>结果</dt>
+                                <dd>
+                                    <div ng-show="selectLoading">
+                                        加载中...
+                                    </div>
+                                    <div class="alert alert-success alert-dismissable" ng-show="selectJobIns.resultStr"
+                                         style="width:90%;width: 90%;table-layout: fixed; WORD-WRAP: break-word;">
+                                        <button type="button" class="close" ng-click="hideResult()">×</button>
+                                        <h4><i class="icon fa fa-check"></i> 实例ID: {{ selectJobIns.ins.id }} 结果查看:</h4>
+                                        {{ selectJobIns.resultStr }}
+                                    </div>
+                                    <table ng-hide="selectLoading"
+                                           class="table table-bordered table-striped table-condensed"
+                                           style=" width: 90%;table-layout: fixed; WORD-WRAP: break-word;">
+                                        <tr>
+                                            <th style="width: 50px">ID</th>
+                                            <th>运行时间</th>
+                                            <th>更新时间</th>
+                                            <th width="100px">flowInstanceId</th>
+                                            <th width="200px">运行状态</th>
+                                            <th>进度</th>
+                                            <th>查看结果</th>
+                                        </tr>
+                                        <tr ng-repeat="ins in instanceList">
+                                            <td ng-bind="ins.id"></td>
+                                            <td ng-bind="ins.createTime | date : 'yyyy-MM-dd HH:mm:ss' "></td>
+                                            <td ng-bind="ins.updateTime | date : 'yyyy-MM-dd HH:mm:ss' "></td>
+                                            <td ng-bind="ins.flowInstanceId"></td>
+                                            <td ng-bind-html="ins.status | instance_status"></td>
+                                            <td>
+                                                <div class="progress-group">
+                                                    <div class="progress progress-xs progress-striped active">
+                                                        <div class="progress-bar progress-bar-success"
+                                                             style="width:{{ ins | process }}%"></div>
+                                                    </div>
+                                                    <div>
+                                                        ({{ ins.successActivityCount }}/{{ ins.totalActivityCount }})
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-default btn-block btn-flat btn-sm"
+                                                        ng-click="showResult(ins)">查看
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                <ul class="pagination pagination-sm no-margin pull-right">
+                                                    <li><a ng-click="getIns(1)">&laquo;</a></li>
+                                                    <li ng-class="insPageClass(p)" ng-repeat="p in showInsPages">
+                                                        <a href="javascript:void(0);" ng-click="getIns(p)"
+                                                           ng-bind="p"></a>
+                                                    </li>
+                                                    <li><a ng-click="getIns(instancePager.pageTotal)">&raquo;</a></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </dd>
+
+
+                            </dl>
+                        </div><!-- /.box-body -->
+                        <div class="overlay" ng-show="selectLoading">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
+                        <div class="box-footer clearfix text-center">
+                            <div class="btn-group">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">关闭</button>
+                    <!--<button type="button" class="btn btn-danger">停止任务</button>-->
+                    <!--<button type="button" class="btn btn-danger">暂停任务</button>-->
+                    <!--<button type="button" class="btn btn-danger">恢复任务</button>-->
+                    <button ng-show="global.auth('xiaobailong-crm_job_run')" type="button" class="btn btn-danger"
+                            ng-click="jobOperator(selectJob.id, 'retry')">重试任务
+                    </button>
+                    <button ng-show="global.auth('xiaobailong-crm_job_run')" type="button" class="btn btn-danger"
+                            ng-click="jobOperator(selectJob.id, 'kill')">终止任务
+                    </button>
+                    <button ng-show="global.auth('xiaobailong-crm_job_run')" type="button" class="btn btn-danger"
+                            ng-click="jobOperator(selectJob.id, 'suspend')">挂起任务
+                    </button>
+                    <button ng-show="global.auth('xiaobailong-crm_job_run')" type="button" class="btn btn-danger"
+                            ng-click="jobOperator(selectJob.id, 'resume')">恢复任务
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+</section><!-- /.content -->
